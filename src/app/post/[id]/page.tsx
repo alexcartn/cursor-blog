@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ModeToggle } from "@/components/mode-toggle"
+import { ChevronLeft } from "lucide-react"
 
 interface PostPageProps {
   params: {
@@ -7,39 +7,79 @@ interface PostPageProps {
   }
 }
 
+const posts = [
+  {
+    id: "1",
+    title: "AI: Your New Artsy Bestie",
+    category: "tech",
+    description: "Exploring the intersection of artificial intelligence and creative expression.",
+    date: "2024-03-15",
+    content: `
+      Artificial Intelligence has become more than just a tool for data analysis and automation - it's now your creative companion. From generating unique artwork to composing music, AI is pushing the boundaries of what's possible in the creative space.
+
+      ## The Creative Revolution
+
+      The emergence of AI in the creative field has sparked both excitement and concern. While some worry about AI replacing human creativity, others see it as a powerful tool that can enhance and augment human creative capabilities.
+
+      ## Key Applications
+
+      - **Digital Art Generation**: Create unique artwork from text descriptions
+      - **Music Composition**: Generate original melodies and harmonies
+      - **Story Writing**: Assist in creative writing and narrative development
+      - **Design Iteration**: Quickly generate multiple design variations
+
+      ## The Future of Creative AI
+
+      As AI technology continues to evolve, we can expect to see even more innovative applications in the creative field. The key is to embrace AI as a collaborative tool while maintaining the human element that makes art truly meaningful.
+    `
+  },
+  // Add more posts as needed
+]
+
 export default function PostPage({ params }: PostPageProps) {
+  const post = posts.find(p => p.id === params.id) || posts[0]
+
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="container flex h-16 items-center justify-between">
-          <Link href="/" className="text-xl font-bold">
-            Minimalist Blog
+      <header className="border-b border-primary/50 py-6">
+        <div className="container">
+          <Link 
+            href="/" 
+            className="inline-flex items-center gap-2 text-sm hover:text-primary transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            Back to Home
           </Link>
-          <ModeToggle />
         </div>
       </header>
-      <main className="container py-8">
-        <article className="prose prose-lg dark:prose-invert mx-auto">
-          <h1>Blog Post {params.id}</h1>
-          <div className="text-sm text-muted-foreground mb-8">
-            Published on {new Date().toLocaleDateString()}
+
+      <main className="container py-12">
+        <article className="max-w-3xl mx-auto">
+          <div className="pixel-border p-8">
+            <div className="space-y-8">
+              <div>
+                <div className="text-xs uppercase tracking-wider text-primary/70 mb-4">
+                  {post.category}
+                </div>
+                <h1 className="text-4xl font-bold glow-text mb-4">{post.title}</h1>
+                <time className="text-sm text-primary/70" dateTime={post.date}>
+                  {new Date(post.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+              </div>
+
+              <div className="prose prose-invert prose-green max-w-none">
+                {post.content.split("\n").map((paragraph, index) => (
+                  <p key={index} className="my-4">
+                    {paragraph.trim()}
+                  </p>
+                ))}
+              </div>
+            </div>
           </div>
-          <p>
-            This is a sample blog post content. In a real blog, this would be
-            replaced with actual content from your CMS or database.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-            minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </p>
-          <p>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-            cupidatat non proident, sunt in culpa qui officia deserunt mollit
-            anim id est laborum.
-          </p>
         </article>
       </main>
     </div>
